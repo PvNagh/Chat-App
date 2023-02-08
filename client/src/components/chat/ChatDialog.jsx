@@ -1,6 +1,8 @@
-import { Dialog, styled } from '@mui/material';
+import { CssBaseline, Dialog, styled } from '@mui/material';
 import { Box } from '@mui/system';
 import EmptyChat from './chat/EmptyChat';
+import Menu from './menu/Menu';
+
 const dialogStyle = {
     height: '95%',
     width: '100%',
@@ -36,10 +38,11 @@ const ChatDialog = () => {
                 maxWidth={'md'}
             >
                 <Component>
-                    <LeftComponent></LeftComponent>
+                    <LeftComponent><Menu></Menu></LeftComponent>
                     <RightComponent><EmptyChat /></RightComponent>
                 </Component>
             </Dialog>
+
         </>
     )
 }
