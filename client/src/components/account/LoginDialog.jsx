@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { Dialog, Typography, Box, styled } from '@mui/material';
 import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from "jwt-decode";
+import { AccountContext } from '../../context/AccountProvider';
 
 const Components = styled(Box)`
     display: flex; 
@@ -25,16 +27,16 @@ const dialogStyle = {
     maxWidth: '100',
     maxHeight: '100%',
     borderRadius: 0,
-    boxShadow: 'none',
     overflow: 'hidden',
-    borderRadius: '20px'
+    borderRadius: '9px'
 }
 
 const LoginDialog = () => {
+    const { setAccount} = useContext(AccountContext);
 
     const onLoginSuccess = async (res) => {
         let decoded = jwt_decode(res.credential);
-        console.log("Success", decoded);
+        setAccount(decoded);
     };
 
     const onLoginFailure = (res) => {
