@@ -21,7 +21,7 @@ const Wrapper = styled(Box)`
         color: #3D5656;
         padding:2.7px;
     };
-    & :last-of-child {
+    & :last-of-type {
         margin-left: 1.5rem;
     }
 `;
