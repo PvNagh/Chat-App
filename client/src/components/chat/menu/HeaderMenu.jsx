@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { MoreVert } from '@mui/icons-material';
-import { Menu, MenuItem, styled } from '@mui/material';
+import { styled } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const MenuOption = styled(MenuItem)`
     font-size: 14px
@@ -9,19 +11,25 @@ const MenuOption = styled(MenuItem)`
 `;
 
 const HeaderMenu = () => {
-    const [open, setOpen] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
     const handleClick = (event) => {
-        setOpen(event.currentTarget);
+        setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
-        setOpen(null);
+        setAnchorEl(null);
     };
     return (
         <>
-            <MoreVert onClick={handleClick} />
+            <MoreVert onClick={handleClick} sx={{
+                fontSize: 30,
+                "&:hover": {
+                    cursor: "pointer",
+                },
+            }} />
             <Menu
-                anchorEl={open}
+                anchorEl={anchorEl}
                 keepMounted
                 open={open}
                 onClose={handleClose}
