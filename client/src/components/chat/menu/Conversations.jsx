@@ -11,12 +11,12 @@ const Component = styled(Box)`
 `;
 
 const StyledDivider = styled(Divider)`
-    margin: 10px 0 0 75px;
+    margin: 1.5rem 0 0 4.7rem;
     background-color: #e9edef;
     opacity: .6;
 `;
 
-const Conversations = () => {
+const Conversations = ({ text }) => {
 
     const [userConvo, setUserConvo] = useState([]);
     const { account } = useContext(AccountContext);
@@ -24,10 +24,11 @@ const Conversations = () => {
     useEffect(() => {
         const fetchData = async () => {
             let response = await getUsers();
-            setUserConvo(response);
+            const filteredData = response.filter(user => user.name.toLowerCase().includes(text.toLowerCase()));
+            setUserConvo(filteredData);
         }
         fetchData();
-    }, []);
+    }, [text]);
     return (
         <Component>
             {
@@ -38,6 +39,7 @@ const Conversations = () => {
                         <StyledDivider />
                     </>
                 ))
+
             }
         </Component>
     );

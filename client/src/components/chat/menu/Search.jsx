@@ -1,4 +1,4 @@
-import { Box, CssBaseline, InputBase, styled } from '@mui/material';
+import { Box,InputBase, styled } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 
 const Component = styled(Box)`
