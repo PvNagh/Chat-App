@@ -18,10 +18,10 @@ export const addUser = async (request, response) => {
     }
 }
 
-export const getUsers = async (req, res) => {
+export const getUsers = async (request, response) => {
     try {
         const user = await User.find({});
-        return res.status(200).json(user);
+        return response.status(200).json(user);
 
     } catch (error) {
         response.status(500).json(error);

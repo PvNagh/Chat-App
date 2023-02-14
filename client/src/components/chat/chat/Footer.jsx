@@ -1,4 +1,4 @@
-import { EmojiEmotions, AttachFile} from '@mui/icons-material';
+import { EmojiEmotions, AttachFile } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import { Box, styled, InputBase } from '@mui/material';
 
@@ -31,15 +31,15 @@ const InputField = styled(InputBase)`
     width: 100%;
 `;
 
-const Footer = () => {
+const Footer = ({ setValue, sendText }) => {
     return (
         <Container>
             <EmojiEmotions
                 sx={{
                     fontSize: 32,
-                    mt:2.5,
-                    mb:2,
-                    ml:1.5,
+                    mt: 2.5,
+                    mb: 2,
+                    ml: 1.5,
                     color: "#3D5656"
                 }}
             />
@@ -48,10 +48,9 @@ const Footer = () => {
                     sx={{
                         transform: 'rotate(40deg)',
                         fontSize: 25,
-                        mt:2,
-                        mb:1,
+                        mt: 2,
+                        mb: 1,
                         color: "#3D5656",
-                      
                     }} />
             </label>
             <input
@@ -63,10 +62,11 @@ const Footer = () => {
             <Search>
                 <InputField
                     placeholder="Type a message"
-                    inputProps={{ 'aria-label': 'search' }}
+                    onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={(e) => sendText(e)}
                 />
             </Search>
-            <SendIcon sx={{ fontSize: 30, color: "#3D5656",}} />
+            <SendIcon sx={{ fontSize: 30, color: "#3D5656", }} />
         </Container>
     )
 }
