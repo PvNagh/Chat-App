@@ -1,7 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Box, styled } from '@mui/material';
 import Footer from './Footer';
 import { AccountContext } from '../../../context/AccountProvider';
+import { newMessage, getMessage } from '../../../service/api';
+import Message from './Message';
 
 const Wrapper = styled(Box)`
     background-color: #F0EEED;
@@ -17,31 +19,48 @@ const Component = styled(Box)`
 const Messages = ({ person, conversation }) => {
 
     const [value, setValue] = useState();
+    const [messages, setMessages] = useState([]);
     const { account } = useContext(AccountContext);
 
-    const sendText =  (e) => {
+    useEffect(() => {
+        const getMessageDetails = async () => {
+            let data = await getMessage(conversation._id);
+            setMessages(data);
+        }
+        conversation._id&&getMessageDetails();
+    }, [conversation._id, person._id]);
+
+    const sendText = async (e) => {
         let code = e.keyCode || e.which;//for enter key press
-        if(!value) return;
-        if (code === 13) {
+        if (!value) return;
+        if (code === 13 || e.type === "click") {
             let message = {
                 senderId: account.sub,
                 receiverId: person.sub,
                 conversationId: conversation._id,
                 type: "text",
-                value: value,
+                text: value
             };
-            console.log(message);
+            await newMessage(message);
+            setValue("");
         }
     }
-        return (
-            <Wrapper>
-                <Component/>
-                <Footer
-                    setValue={setValue}
-                    sendText={sendText}
-                />
-            </Wrapper>
-        )
-    }
+    return (
+        <Wrapper>
+            <Component>
+                {
+                    messages && messages.map(message => {
+                        <Message message={message} />
+                    })
+                }
+            </Component>
+            <Footer
+                setValue={setValue}
+                sendText={sendText}
+                value={value}
+            />
+        </Wrapper>
+    )
+}
 
-    export default Messages;
+export default Messages;

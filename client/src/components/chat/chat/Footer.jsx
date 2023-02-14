@@ -22,7 +22,7 @@ const Search = styled(Box)`
     width: 54rem;
 `;
 
-const InputField = styled(InputBase)`
+const InputField = styled(InputBase)` 
     width: 100%;
     padding: 1.2rem;
     padding-left: 1rem;
@@ -31,7 +31,8 @@ const InputField = styled(InputBase)`
     width: 100%;
 `;
 
-const Footer = ({ setValue, sendText }) => {
+const Footer = ({ setValue, sendText,value }) => {
+
     return (
         <Container>
             <EmojiEmotions
@@ -64,9 +65,18 @@ const Footer = ({ setValue, sendText }) => {
                     placeholder="Type a message"
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={(e) => sendText(e)}
+                    value={value}
                 />
             </Search>
-            <SendIcon sx={{ fontSize: 30, color: "#3D5656", }} />
+            <SendIcon
+                onClick={(e) => sendText(e)}
+                sx={{
+                    fontSize: 30,
+                    color: "#3D5656",
+                    "&:hover": {
+                        cursor: "pointer",
+                    },
+                }} />
         </Container>
     )
 }
