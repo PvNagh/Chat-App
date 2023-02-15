@@ -1,11 +1,11 @@
-import message from "../model/Message.js";
-import conversation from '../model/Conversation.js';
+import Message from "../model/Message.js";
+import Conversation from '../model/Conversation.js';
 
 export const newMessage = async (request, response) => {
-    const newMessage = new message(request.body);
+    const newMessage = new Message(request.body);
     try {
         await newMessage.save();
-        await conversation.findByIdAndUpdate(request.body.conversationId, { message: request.body.text });
+        await Conversation.findByIdAndUpdate(request.body.conversationId, { message: request.body.text });
         response.status(200).json("Message has been sent successfully");
     } catch (error) {
         response.status(500).json(error);
@@ -15,7 +15,7 @@ export const newMessage = async (request, response) => {
 
 export const getMessage = async (request, response) => {
     try {
-        const messages = await message.find({ conversationId: request.params.id });
+        const messages = await Message.find({ conversationId: request.params.id });
         response.status(200).json(messages);
     } catch (error) {
         response.status(500).json(error);

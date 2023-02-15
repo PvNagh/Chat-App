@@ -3,7 +3,7 @@ import { Box, styled } from '@mui/material';
 import Footer from './Footer';
 import { AccountContext } from '../../../context/AccountProvider';
 import { newMessage, getMessage } from '../../../service/api';
-import Message from './Message';
+import Message from './Message.jsx';
 
 const Wrapper = styled(Box)`
     background-color: #F0EEED;
@@ -16,19 +16,25 @@ const Component = styled(Box)`
     overflow-y: scroll;
 `;
 
+const Container = styled(Box)`
+    padding: 1px 80px;
+`;
+
+
 const Messages = ({ person, conversation }) => {
 
     const [value, setValue] = useState();
     const [messages, setMessages] = useState([]);
+    const [newMessageFlag, setNewMessageFlag] = useState(false);
     const { account } = useContext(AccountContext);
 
     useEffect(() => {
         const getMessageDetails = async () => {
-            let data = await getMessage(conversation._id);
+            let data = await getMessage(conversation?._id);
             setMessages(data);
         }
-        conversation._id&&getMessageDetails();
-    }, [conversation._id, person._id]);
+        getMessageDetails();
+    }, [conversation?._id, person._id, newMessageFlag]);
 
     const sendText = async (e) => {
         let code = e.keyCode || e.which;//for enter key press
@@ -43,15 +49,18 @@ const Messages = ({ person, conversation }) => {
             };
             await newMessage(message);
             setValue("");
+            setNewMessageFlag(prev => !prev);
         }
     }
     return (
         <Wrapper>
             <Component>
-                {
-                    messages && messages.map(message => {
-                        <Message message={message} />
-                    })
+            {
+                    messages && messages.map(message => (
+                        <Container>
+                            <Message message={message.text} date={message.createdAt} senderId={message.senderId} />
+                        </Container>
+                    ))
                 }
             </Component>
             <Footer
