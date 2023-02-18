@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const url = 'http://localhost:8000';
 
@@ -52,5 +52,14 @@ export const getMessage = async (id) => {
         return response.data;
     } catch (error) {
         console.log('Error while calling getMessage API ', error);
+    }
+}
+
+export const uploadFile = async (data) => {
+    try {
+        return await axios.post(`${url}/file/upload`, data);
+    }
+    catch (error) {
+        console.log('Error while calling uploadFile API ', error);
     }
 }

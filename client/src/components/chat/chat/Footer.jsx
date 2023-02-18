@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { EmojiEmotions, AttachFile } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import { Box, styled, InputBase } from '@mui/material';
+import { uploadFile } from '../../../service/api';
 
 const Container = styled(Box)`
     height: 3.7rem;
@@ -31,7 +33,27 @@ const InputField = styled(InputBase)`
     width: 100%;
 `;
 
-const Footer = ({ setValue, sendText,value }) => {
+const Footer = ({ setValue, sendText, value, file, setFile, setImage }) => {
+
+    const onFileChange = (e) => {
+        setFile(e.target.files[0]);
+        setValue(e.target.files[0].name);
+    }
+
+    useEffect(() => {
+        const getImage = async () => {
+            if (file) {
+                const data = new FormData();
+                data.append("name", file.name);
+                data.append("file", file);
+
+                const response = await uploadFile(data);
+                setImage(response.data);
+            }
+        }
+        getImage();
+    }, [file]);
+
 
     return (
         <Container>
@@ -52,12 +74,16 @@ const Footer = ({ setValue, sendText,value }) => {
                         mt: 2,
                         mb: 1,
                         color: "#3D5656",
+                        "&:hover": {
+                            cursor: "pointer",
+                        },
                     }} />
             </label>
             <input
-                type='file'
+                type="file"
                 id="fileInput"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
+                onChange={(e) => onFileChange(e)}
             />
 
             <Search>

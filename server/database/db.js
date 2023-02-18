@@ -13,7 +13,6 @@ const Connection = async (url) => {
     } catch (error) {
         console.log('Error: ', error.message);
     }
-
 };
 
 export default Connection;

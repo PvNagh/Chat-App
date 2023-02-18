@@ -1,7 +1,9 @@
 import { useContext } from "react";
-import { Box, Typography ,styled } from "@mui/material";
-import { formatDate } from "../../../utils/common-utils";
+import { Box, Typography, styled } from "@mui/material";
+import { formatDate, downloadMedia } from "../../../utils/common-utils";
 import { AccountContext } from "../../../context/AccountProvider";
+import { iconPDF } from "../../../constants/data";
+import { GetApp as GetAppIcon } from "@mui/icons-material";
 
 const Own = styled(Box)`
     background: #dcf8c6;
@@ -37,7 +39,7 @@ const Time = styled(Typography)`
     margin-top: auto;
 `;
 
-const Message = ({ message, date ,senderId}) => {
+const Message = ({ message, date, senderId, messageType }) => {
 
     const { account } = useContext(AccountContext);
 
@@ -46,18 +48,56 @@ const Message = ({ message, date ,senderId}) => {
             {
                 account.sub === senderId ?
                     <Own>
-                        <Text>{message}</Text>
-                        <Time>{formatDate(date)}</Time>
+                        {
+                            messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
+                        }
                     </Own>
                     :
                     <Wrapper>
-                        <Text>{message}</Text>
-                        <Time>{formatDate(date)}</Time>
+                        {
+                            messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
+                        }
                     </Wrapper>
             }
         </>
-
     );
+}
+
+const TextMessage = ({ message, date }) => {
+
+    return (
+        <>
+            <Text>{message}</Text>
+            <Time>{formatDate(date)}</Time>
+        </>
+    )
+}
+
+const ImageMessage = ({ message, date }) => {
+
+    return (
+        <Box style={{ position: 'relative' }}>
+            {
+                message?.includes('.pdf') ?
+                    <Box style={{ display: 'flex' }}>
+                        <img src={iconPDF} alt="pdf-icon" style={{ width: 80 }} />
+                        <Typography style={{ fontSize: 14 }}>{message.split("/").pop()}</Typography>
+                    </Box>
+                    :
+                    <img style={{ width: 300, height: '100%', objectFit: 'cover' }} src={message} alt={message} />
+            }
+            <Time style={{ position: "absolute", bottom: 0, right: 0 }}>
+                <GetAppIcon
+                    onClick={(e) => downloadMedia(e, message)}
+                    fontSize='small'
+                    style={{
+                        marginRight: 10, border: '1px solid grey', borderRadius: '50%', cursor: "pointer",
+                    }}
+                />
+                {formatDate(date)}
+            </Time>
+        </Box>
+    )
 }
 
 export default Message;
