@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { Box, styled } from '@mui/material';
 import Footer from './Footer';
 import { AccountContext } from '../../../context/AccountProvider';
@@ -27,7 +27,20 @@ const Messages = ({ person, conversation }) => {
     const [newMessageFlag, setNewMessageFlag] = useState(false);
     const [file, setFile] = useState();
     const [image, setImage] = useState("");
-    const { account } = useContext(AccountContext);
+    const [incomingMessage, setIncomingMessage] = useState(null);
+
+    const { account, socket } = useContext(AccountContext);
+
+    const scrollRef = useRef();
+
+    useEffect(() => {
+        socket.current.on('getMessage', data => {
+            setIncomingMessage({
+                ...data,
+                createdAt: Date.now()
+            })
+        })
+    }, []);
 
     useEffect(() => {
         const getMessageDetails = async () => {
@@ -36,6 +49,16 @@ const Messages = ({ person, conversation }) => {
         }
         getMessageDetails();
     }, [conversation?._id, person._id, newMessageFlag]);
+
+    useEffect(() => {
+        incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
+            setMessages((prev) => [...prev, incomingMessage]);
+
+    }, [incomingMessage, conversation]);
+
+    useEffect(() => {
+        scrollRef.current?.scrollIntoView({ transition: "smooth" })
+    }, [messages, conversation]);
 
     const sendText = async (e) => {
         let code = e.keyCode || e.which;//for enter key press
@@ -60,6 +83,8 @@ const Messages = ({ person, conversation }) => {
                     text: image
                 }
             }
+
+            socket.current.emit("sendMessage", message)
             await newMessage(message);
             setValue("");
             setImage("");
@@ -72,7 +97,7 @@ const Messages = ({ person, conversation }) => {
             <Component>
                 {
                     messages && messages.map(message => (
-                        <Container>
+                        <Container ref={scrollRef}>
                             <Message message={message.text} date={message.createdAt} senderId={message.senderId} messageType={message.type} />
                         </Container>
                     ))

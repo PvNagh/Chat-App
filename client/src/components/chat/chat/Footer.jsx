@@ -21,7 +21,7 @@ const Container = styled(Box)`
 const Search = styled(Box)`
     border-radius: .8rem;
     background-color: #FFFFFF;
-    width: 54rem;
+    width: calc(94% - 100px);
 `;
 
 const InputField = styled(InputBase)` 

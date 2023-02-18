@@ -6,8 +6,12 @@ import Menu from './menu/Menu'
 import ChatBox from './chat/ChatBox';
 import { AccountContext } from '../../context/AccountProvider';
 
+const Component = styled(Box)`
+    display:flex;
+`;
+
 const dialogStyle = {
-    height: '95%',
+    height: '96%',
     width: '100%',
     margin: '20px',
     maxWidth: '100%',
@@ -16,12 +20,8 @@ const dialogStyle = {
     overflow: 'hidden'
 };
 
-const Component = styled(Box)`
-    display: flex;
-    height:100%;
-`;
 const LeftComponent = styled(Box)`
- min-width: 450px;
+    min-width: 450px;
 `;
 
 const RightComponent = styled(Box)`
@@ -44,13 +44,16 @@ const ChatDialog = () => {
                 maxWidth={'md'}
             >
                 <Component>
-                    <LeftComponent><Menu></Menu></LeftComponent>
+                    <LeftComponent>
+                        <Menu />
+                    </LeftComponent>
                     <RightComponent>
-                        {Object.keys(person).length ? <ChatBox /> : <EmptyChat />}
+                        {
+                            Object.keys(person).length ? <ChatBox /> : <EmptyChat />
+                        }
                     </RightComponent>
                 </Component>
             </Dialog>
-
         </>
     )
 }
