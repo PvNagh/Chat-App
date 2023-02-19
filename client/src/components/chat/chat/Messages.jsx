@@ -24,12 +24,11 @@ const Messages = ({ person, conversation }) => {
 
     const [value, setValue] = useState();
     const [messages, setMessages] = useState([]);
-    const [newMessageFlag, setNewMessageFlag] = useState(false);
     const [file, setFile] = useState();
     const [image, setImage] = useState("");
     const [incomingMessage, setIncomingMessage] = useState(null);
 
-    const { account, socket } = useContext(AccountContext);
+    const { account, socket ,newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
 
     const scrollRef = useRef();
 

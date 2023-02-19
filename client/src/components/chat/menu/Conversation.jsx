@@ -1,7 +1,9 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
-import { setConversation } from "../../../service/api";
+import { setConversation, getConversation } from "../../../service/api";
+import { formatDate } from "../../../utils/common-utils";
+
 
 const Component = styled(Box)`
     display: flex;
@@ -24,9 +26,35 @@ const NameComponent = styled(Box)`
     margin-left:0.9rem;
 `
 
+const Container = styled(Box)`
+    display: flex;
+`;
+
+const Text = styled(Typography)`
+    display: block;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
+    margin-top:7px;
+`;
+
+const Timestamp = styled(Typography)`
+    font-size: 12px;
+    color: #00000099;
+    margin-left: 13rem;
+`;
+
 const Conversation = ({ user }) => {
 
-    const { account, setPerson } = useContext(AccountContext);
+    const { account, setPerson, newMessageFlag } = useContext(AccountContext);
+    const [message, setMessage] = useState({});
+
+    useEffect(() => {
+        const getConversationMessage = async () => {
+            const data = await getConversation({ senderId: account.sub, receiverId: user.sub });
+            setMessage({ text: data?.message, timestamp: data?.updatedAt });
+        }
+        getConversationMessage();
+    }, [newMessageFlag]);
 
     const getUser = async () => {
         setPerson(user);
@@ -39,7 +67,16 @@ const Conversation = ({ user }) => {
                 <Image src={user.picture} alt="dp" />
             </ImgComponent>
             <NameComponent>
-                <Typography>{user.name}</Typography>
+                <Container>
+                    <Typography>{user.name}</Typography>
+                    {
+                        message?.text &&
+                        <Timestamp>{formatDate(message?.timestamp)}</Timestamp>
+                    }
+                </Container>
+                <Box>
+                    <Text>{message?.text?.includes('localhost') ? 'media' : message.text}</Text>
+                </Box>
             </NameComponent>
         </Component>
     );

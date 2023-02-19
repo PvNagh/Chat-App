@@ -6,6 +6,7 @@ const io = new Server(9000, {
     },
 })
 
+
 let users = [];
 
 const addUsers = (userData, socketId) => {
@@ -19,17 +20,15 @@ const getUser = (userId) => {
 io.on("connection", (socket) => {
     console.log("user connected");
 
+    //connect
     socket.on("addUsers", userData => {
         addUsers(userData, socket.id);
         io.emit("getUsers", users);
     })
 
-    socket.on('sendMessage', (data) => {
+    //send message
+    socket.on("sendMessage", (data) => {
         const user = getUser(data.receiverId);
-        io.to(user.socketId).emit('getMessage', data)
+        io.to(user.socketId).emit("getMessage", data)
     })
 })
-
-
-
-

@@ -6,11 +6,12 @@ const AccountProvider = ({ children }) => {
     const [account, setAccount] = useState();
     const [person, setPerson] = useState({});
     const [activeUsers, setActiveUsers] = useState([]);
-    const socket=useRef();
+    const [newMessageFlag, setNewMessageFlag] = useState(false);
+    const socket = useRef();
 
-    useEffect(()=>{
-        socket.current=io("http://localhost:9000");
-    },[]);
+    useEffect(() => {
+        socket.current = io("http://localhost:9000");
+    }, []);
 
     return (
         <AccountContext.Provider value={{
@@ -20,7 +21,9 @@ const AccountProvider = ({ children }) => {
             setPerson,
             socket,
             activeUsers,
-            setActiveUsers
+            setActiveUsers,
+            newMessageFlag,
+            setNewMessageFlag
         }}>
             {children}
         </AccountContext.Provider>
