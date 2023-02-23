@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 export const AccountContext = createContext();
 
 const AccountProvider = ({ children }) => {
-    const [account, setAccount] = useState();
+    const [account, setAccount] = useState({ email: "", name: "", picture: "" });
     const [person, setPerson] = useState({});
     const [activeUsers, setActiveUsers] = useState([]);
     const [newMessageFlag, setNewMessageFlag] = useState(false);

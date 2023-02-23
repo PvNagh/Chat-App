@@ -5,6 +5,12 @@ import EmptyChat from './chat/EmptyChat';
 import Menu from './menu/Menu'
 import ChatBox from './chat/ChatBox';
 import { AccountContext } from '../../context/AccountProvider';
+import { AppBar, CssBaseline } from '@mui/material';
+
+const Components = styled(Box)`
+    height: 100vh;
+    background: #FFFBF5;
+`;
 
 const Component = styled(Box)`
     display:flex;
@@ -31,12 +37,19 @@ const RightComponent = styled(Box)`
     border-left: 1px solid rgba(0, 0, 0, 0.14);
 `;
 
+const Header = styled(AppBar)`
+    background-color: #1E2022;
+    height: 125px;
+    box-shadow: none;
+`;
+
 const ChatDialog = () => {
 
     const { person } = useContext(AccountContext);
 
     return (
-        <>
+        <Components>
+            <Header />
             <Dialog
                 open={true}
                 BackdropProps={{ style: { backgroundColor: 'unset' } }}
@@ -54,7 +67,9 @@ const ChatDialog = () => {
                     </RightComponent>
                 </Component>
             </Dialog>
-        </>
+            <CssBaseline/>
+        </Components>
+        
     )
 }
 

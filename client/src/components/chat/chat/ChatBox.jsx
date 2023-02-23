@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import { AccountContext } from '../../../context/AccountProvider';
 import { getConversation } from '../../../service/api';
 
@@ -12,16 +12,17 @@ const ChatBox = () => {
 
     useEffect(() => {
         const getConversationDetails = async () => {
-            let data = await getConversation({ senderId: account.sub, receiverId: person.sub });
-            setConversation(data);
+            let response = await getConversation({ senderId: account.email, receiverId: person.email });
+            setConversation(response);
         }
         getConversationDetails();
-    }, [person.sub]);
+    }, [person.email]);
 
     return (
         <Box>
             <ChatHeader person={person} />
             <Messages person={person} conversation={conversation} />
+            <CssBaseline />
         </Box>
     )
 }
