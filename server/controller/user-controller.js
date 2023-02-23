@@ -1,20 +1,50 @@
 import User from "../model/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import Token from "../model/Token.js";
 
-export const addUser = async (request, response) => {
+dotenv.config();
+
+export const signup = async (request, response) => {
     try {
-        console.log(request.body);
-        let exist = await User.findOne({ sub: request.body.sub });
+        const { name, email, picture, password } = request.body;
+        const oldUser = await User.findOne({ email });
+        if (oldUser) return response.status(200).json("User already exists" );
+        // const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(request.body.password, 10);
+        const user = { name: request.body.name, email: request.body.email, picture: request.body.picture, password: hashedPassword };
+        const newUser = new User(user);
 
-        if (exist) {
-            response.status(200).json('user already exists');
-            return;
-        }
-
-        const newUser = new User(request.body);
         await newUser.save();
-        response.status(200).json(newUser);
+        return response.status(200).json("Signup successfull");
     } catch (error) {
-        response.status(500).json(error);
+        return response.status(500).json("Something went wrong" );
+    }
+};
+
+export const loginUser = async (request, response) => {
+    let user = await User.findOne({ email: request.body.email });
+    if (!user) {
+        return response.status(200).json("Email does not match" );
+    }
+
+    try {
+        let match = await bcrypt.compare(request.body.password, user.password);
+        if (match) {
+            const accessToken = jwt.sign(user.toJSON(), process.env.ACCESS_SECRET_KEY, { expiresIn: "15m" });
+            const refreshToken = jwt.sign(user.toJSON(), process.env.REFRESH_SECRET_KEY);
+
+            const newToken = new Token({ token: refreshToken });
+            await newToken.save();
+
+            response.status(200).json({ accessToken: accessToken, refreshToken: refreshToken, email: user.email, name: user.name, picture:user.picture});
+
+        } else {
+            return response.status(200).json("Password does not match" );
+        }
+    } catch (error) {
+        return response.status(500).json("Error while login the user");
     }
 }
 
@@ -27,3 +57,4 @@ export const getUsers = async (request, response) => {
         response.status(500).json(error);
     }
 }
+

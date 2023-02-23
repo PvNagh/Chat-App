@@ -18,7 +18,7 @@ export const uploadFile = (request, response) => {
 
     const fileUrl = `${url}/file/${request.file.filename}`;
 
-    response.status(200).json(fileUrl);
+    return response.status(200).json(fileUrl);
 }
 
 export const getImage = async (request, response) => {

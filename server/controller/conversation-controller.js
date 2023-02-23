@@ -1,6 +1,7 @@
 import Conversation from "../model/Conversation.js";
 
 export const newConversation = async (request, response) => {
+    console.log(request);
     let senderId = request.body.senderId;
     let receiverId = request.body.receiverId;
 
