@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { Box, styled } from '@mui/material';
 import Footer from './Footer';
 import { AccountContext } from '../../../context/AccountProvider';
-import { newMessage, getMessage } from '../../../service/api';
+import { getMessage, newMessage  } from '../../../service/api';
 import Message from './Message.jsx';
 
 const Wrapper = styled(Box)`
@@ -12,12 +12,12 @@ const Wrapper = styled(Box)`
 `;
 
 const Component = styled(Box)`
-    height: 79vh;
+    height: 80vh;
     overflow-y: scroll;
 `;
 
 const Container = styled(Box)`
-    padding: 1px 80px;
+    padding: 3px 32px;
 `;
 
 const Messages = ({ person, conversation }) => {
@@ -28,12 +28,12 @@ const Messages = ({ person, conversation }) => {
     const [image, setImage] = useState("");
     const [incomingMessage, setIncomingMessage] = useState(null);
 
-    const { account, socket ,newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
+    const { account, socket, newMessageFlag, setNewMessageFlag } = useContext(AccountContext);
 
     const scrollRef = useRef();
 
     useEffect(() => {
-        socket.current.on('getMessage', data => {
+        socket.current.on("getMessage", data => {
             setIncomingMessage({
                 ...data,
                 createdAt: Date.now()
@@ -43,11 +43,11 @@ const Messages = ({ person, conversation }) => {
 
     useEffect(() => {
         const getMessageDetails = async () => {
-            let data = await getMessage(conversation?._id);
-            setMessages(data);
+            let response = await getMessage(conversation?._id);
+            setMessages(response);
         }
         getMessageDetails();
-    }, [conversation?._id, person._id, newMessageFlag]);
+    }, [conversation?._id, person.email, newMessageFlag]);
 
     useEffect(() => {
         incomingMessage && conversation?.members?.includes(incomingMessage.senderId) &&
@@ -66,8 +66,8 @@ const Messages = ({ person, conversation }) => {
             let message = {};
             if (!file) {
                 message = {
-                    senderId: account.sub,
-                    receiverId: person.sub,
+                    senderId: account.email,
+                    receiverId: person.email,
                     conversationId: conversation._id,
                     type: "text",
                     text: value
@@ -75,8 +75,8 @@ const Messages = ({ person, conversation }) => {
             }
             else {
                 message = {
-                    senderId: account.sub,
-                    receiverId: person.sub,
+                    senderId: account.email,
+                    receiverId: person.email,
                     conversationId: conversation._id,
                     type: "file",
                     text: image
@@ -97,7 +97,14 @@ const Messages = ({ person, conversation }) => {
                 {
                     messages && messages.map(message => (
                         <Container ref={scrollRef}>
-                            <Message message={message.text} date={message.createdAt} senderId={message.senderId} messageType={message.type} />
+                            <Message
+                                message={message.text}
+                                date={message.createdAt}
+                                senderId={message.senderId}
+                                messageType={message.type} 
+                                senderDp={account.picture}
+                                receiverDp={person.picture} 
+                                />
                         </Container>
                     ))
                 }

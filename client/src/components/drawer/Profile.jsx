@@ -20,7 +20,7 @@ const BoxWrapper = styled(Box)`
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     & :first-of-type {
         font-size: 13px;
-        color: #009688;
+        color: #52616B;
         font-weight: 200;
     };
     & :last-of-type {
@@ -47,15 +47,15 @@ const Profile = () => {
                 <Image src={account.picture} alt="displaypicture" />
             </ImageContainer>
             <BoxWrapper>
-                <Typography>Your name</Typography>
+                <Typography>Name</Typography>
                 <Typography>{account.name}</Typography>
             </BoxWrapper>
             <DescriptionContainer>
                 <Typography>This is your UserName.</Typography>
             </DescriptionContainer>
             <BoxWrapper>
-                <Typography>About</Typography>
-                <Typography>Set Your About</Typography>
+                <Typography>Email</Typography>
+                <Typography>This is your Email</Typography>
             </BoxWrapper>
         </>
     )

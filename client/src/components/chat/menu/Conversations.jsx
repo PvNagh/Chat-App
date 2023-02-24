@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { Box, styled, Divider } from "@mui/material";
-import { getUsers } from "../../../service/api";
 import { AccountContext } from "../../../context/AccountProvider";
 import Conversation from "./Conversation";
+import { getUsers } from "../../../service/api";
 
 //in case of overflow
 const Component = styled(Box)` 
@@ -13,7 +13,7 @@ const Component = styled(Box)`
 const StyledDivider = styled(Divider)`
     margin: 1.5rem 0 0 4.7rem;
     background-color: #e9edef;
-    opacity: .6;
+    opacity: .9;
 `;
 
 const Conversations = ({ text }) => {
@@ -32,7 +32,7 @@ const Conversations = ({ text }) => {
     }, [text]);
 
     useEffect(() => {
-        socket.current.emit("addUsers", account);
+        socket.current.emit("signup", account);
         socket.current.on("getUsers", users => {
             setActiveUsers(users);
         })
@@ -42,7 +42,7 @@ const Conversations = ({ text }) => {
         <Component>
             {
                 userConvo && userConvo.map(user => (
-                    user.sub !== account.sub &&
+                    user.email !== account.email &&
                     <>
                         <Conversation user={user} />
                         <StyledDivider />

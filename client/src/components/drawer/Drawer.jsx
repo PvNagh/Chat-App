@@ -3,9 +3,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Profile from './Profile.jsx';
 
 const Header = styled(Box)`
-  background: #008069;
+  background: #1E2022;
   height: 107px;
-  color: #FFFFFF;
+  color: #F0F5F9;
   display: flex;
    & > p {
     margin-top: auto;
@@ -18,7 +18,7 @@ const Header = styled(Box)`
 `;
 
 const Component = styled(Box)`
-  background: #ededed;
+  background: #F0F5F9;
   height: 85%;
 `;
 

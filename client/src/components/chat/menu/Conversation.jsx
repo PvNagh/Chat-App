@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Box, Typography, styled } from "@mui/material";
 import { AccountContext } from "../../../context/AccountProvider";
-import { setConversation, getConversation } from "../../../service/api";
+import { getConversation, setConversation } from "../../../service/api";
 import { formatDate } from "../../../utils/common-utils";
-
 
 const Component = styled(Box)`
     display: flex;
@@ -20,14 +19,11 @@ const Image = styled("img")({
 
 const ImgComponent = styled(Box)`
     padding: 0 0.04rem 2rem;    
-`
-
-const NameComponent = styled(Box)`
-    margin-left:0.9rem;
-`
+`;
 
 const Container = styled(Box)`
-    display: flex;
+    display:flex;
+    word-break: break-word;
 `;
 
 const Text = styled(Typography)`
@@ -40,7 +36,8 @@ const Text = styled(Typography)`
 const Timestamp = styled(Typography)`
     font-size: 12px;
     color: #00000099;
-    margin-left: 13rem;
+    margin-left: auto;
+    margin-right: 8px;
 `;
 
 const Conversation = ({ user }) => {
@@ -50,34 +47,35 @@ const Conversation = ({ user }) => {
 
     useEffect(() => {
         const getConversationMessage = async () => {
-            const data = await getConversation({ senderId: account.sub, receiverId: user.sub });
-            setMessage({ text: data?.message, timestamp: data?.updatedAt });
+            let response = await getConversation({ senderId: account.email, receiverId: user.email });
+            console.log(response);
+            setMessage({ text: response?.message, timestamp: response?.updatedAt });
         }
         getConversationMessage();
     }, [newMessageFlag]);
 
     const getUser = async () => {
         setPerson(user);
-        await setConversation({ senderId: account.sub, receiverId: user.sub });
+        await setConversation({ senderId: account.email, receiverId: user.email });
     }
-
     return (
         <Component onClick={() => getUser()}>
             <ImgComponent>
                 <Image src={user.picture} alt="dp" />
             </ImgComponent>
-            <NameComponent>
+            <Box style={{ width: '100%', paddingLeft: "16px" }}>
                 <Container>
-                    <Typography>{user.name}</Typography>
+                    <Typography>{user.name.slice(0, 29)}</Typography>
                     {
                         message?.text &&
                         <Timestamp>{formatDate(message?.timestamp)}</Timestamp>
                     }
                 </Container>
                 <Box>
-                    <Text>{message?.text?.includes('localhost') ? 'media' : message.text}</Text>
+                    <Text>{message?.text?.includes('localhost') ? 'media' :
+                        (message?.text?.slice(0, 32))}</Text>
                 </Box>
-            </NameComponent>
+            </Box>
         </Component>
     );
 }

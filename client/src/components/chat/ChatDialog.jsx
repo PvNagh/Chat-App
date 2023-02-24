@@ -9,7 +9,7 @@ import { AppBar, CssBaseline } from '@mui/material';
 
 const Components = styled(Box)`
     height: 100vh;
-    background: #FFFBF5;
+    background: #F0F5F9;
 `;
 
 const Component = styled(Box)`

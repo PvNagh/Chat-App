@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Typography, styled } from "@mui/material";
+import { Box, Typography, styled, CssBaseline } from "@mui/material";
 import { formatDate, downloadMedia } from "../../../utils/common-utils";
 import { AccountContext } from "../../../context/AccountProvider";
 import { iconPDF } from "../../../constants/data";
@@ -27,37 +27,68 @@ const Wrapper = styled(Box)`
 `;
 
 const Text = styled(Typography)`
-    font-size: 14px;
+    font-size: 1.1rem;
     padding: 0 25px 0 5px;
 `;
 
+const Image = styled("img")({
+    width: 27,
+    height: 27,
+    borderRadius: '50%',
+});
+
+const ImgComponentSender = styled(Box)`
+ padding:4px 0px 0px 10px;
+`;
+const ImgComponentReceiver = styled(Box)`
+    padding:4px 10px 0px 0;
+`;
+const MessageBox = styled(Box)`
+   display:flex;
+`;
+
 const Time = styled(Typography)`
-    font-size: 10px;
+    font-size: 0.7rem;
     color: #919191;
     margin-top: 6px;
     word-break: keep-all;
     margin-top: auto;
 `;
 
-const Message = ({ message, date, senderId, messageType }) => {
+const Message = ({ message, date, senderId, messageType, senderDp, receiverDp }) => {
 
     const { account } = useContext(AccountContext);
 
     return (
         <>
             {
-                account.sub === senderId ?
-                    <Own>
-                        {
-                            messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
-                        }
-                    </Own>
+                account.email === senderId ?
+
+                    <MessageBox>
+                        <Own>
+                            {
+                                messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
+                            }
+                        </Own>
+                        <ImgComponentSender>
+                            <Image src={senderDp} alt="dp" />
+                        </ImgComponentSender>
+                    </MessageBox>
+
                     :
-                    <Wrapper>
-                        {
-                            messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
-                        }
-                    </Wrapper>
+                    <MessageBox>
+                        <ImgComponentReceiver>
+                            <Image src={receiverDp} alt="dp" />
+                        </ImgComponentReceiver>
+                        <Wrapper>
+                            {
+                                messageType === "file" ? <ImageMessage message={message} date={date} /> : <TextMessage message={message} date={date} />
+                            }
+                         
+                        </Wrapper>
+                    </MessageBox>
+
+
             }
         </>
     );

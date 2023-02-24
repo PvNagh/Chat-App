@@ -6,7 +6,7 @@ import { AccountContext } from '../../../context/AccountProvider';
 
 const Header = styled(Box)`
     height: 3.7rem;
-    background: #ededed;
+    background: #F0F5F9;
     display: flex;
     padding: 8px 16px;
     align-items: center;
@@ -28,7 +28,7 @@ const RightContainer = styled(Box)`
     & > svg {
         margin-top:0.45rem;
         margin-left: 1rem;
-        color: #3D5656;
+        color: #1E2022;
         padding:2.7px;
     }
 `;
@@ -48,7 +48,7 @@ const ChatHeader = ({ person }) => {
             <Image src={url} alt={person.picture} />
             <Box>
                 <Name>{person.name}</Name>
-                <Status>{activeUsers?.find(users => users.sub === person.sub) ? "Online" : "Offline"}</Status>
+                <Status>{activeUsers?.find(users => users.email=== person.email) ? "Online" : "Offline"}</Status>
             </Box>
             <RightContainer>
                 <Search sx={{ fontSize: 30 }} />
