@@ -20,14 +20,14 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import EmailIcon from '@mui/icons-material/Email';
 
 const LoginHeader = styled(AppBar)`
-    background: #18122B;
+    background: #1E2022;
     height: 275px;
     box-shadow: none;
 `;
 
 const Components = styled(Box)`
     height: 100vh;
-    background: #FFFBEB;
+    background: #F0F5F9;
 `;
 const ImgBox = styled(Box)`
     margin:4rem 30rem 0rem 0rem;
@@ -70,16 +70,16 @@ const Error = styled(Typography)`
 
 const LoginButton = styled(Button)`
     text-transform: none;
-    background: #393053;
-    color: #FFFBEB;
+    background: #52616B;
+    color: #F0F5F9;
     height: 48px;
     border-radius: 2px;
 `;
 
 const SignupButton = styled(Button)`
     text-transform: none;
-    background: #FFFBEB;
-    color: #263159;
+    background: #F0F5F9;
+    color: #52616B;
     height: 48px;
     border-radius: 2px;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 20%);
@@ -149,7 +149,6 @@ const LoginDialog = ({ isUserAuthenticated }) => {
 
     //filling form data values-login
     const onValueChange = (e) => {
-
         setlogin({ ...login, [e.target.name]: e.target.value });
     }
 
@@ -174,9 +173,9 @@ const LoginDialog = ({ isUserAuthenticated }) => {
         event.preventDefault();
     };
 
+    //detecting file uploads
     const onFileChange = (e) => {
         setFile(e.target.files[0]);
-
     }
 
     // picture upload option
@@ -205,12 +204,9 @@ const LoginDialog = ({ isUserAuthenticated }) => {
             setError("Invalid Password");
         } else if (response === "Email does not match") {
             setError("Invalid Email");
-            //successful login
+        //successful login
         } else {
-
             sessionStorage.setItem('accessToken', `Bearer ${response.accessToken}`);
-            sessionStorage.setItem('refreshToken', `Bearer ${response.refreshToken}`);
-
             setError("");
             setAccount({ name: response.name, email: response.email, picture: response.picture });
             isUserAuthenticated(true);
@@ -232,6 +228,8 @@ const LoginDialog = ({ isUserAuthenticated }) => {
                 <Component>
                     {
                         formType === "login" ?
+
+                        //login form 
                             <Wrapper>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <EmailIcon sx={{ color: 'action.active', mr: 1, my: 1.1 }} />
@@ -278,6 +276,8 @@ const LoginDialog = ({ isUserAuthenticated }) => {
                             </Wrapper>
 
                             :
+                            //signup form
+
                             <Wrapper>
                                 <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                                     <AccountCircleIcon sx={{ color: 'action.active', mr: 1, my: 1.1 }} />

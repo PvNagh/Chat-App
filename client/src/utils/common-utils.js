@@ -1,9 +1,11 @@
+//date
 export const formatDate = (date) => {
     const hours = new Date(date).getHours();
     const minutes = new Date(date).getMinutes();
     return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
 }
 
+//file downloading
 export const downloadMedia = async (e, originalImage) => {
     e.preventDefault();
     try {
@@ -28,4 +30,9 @@ export const downloadMedia = async (e, originalImage) => {
     } catch (error) {
         console.log("Error while downloading the image ", error);
     }
+}
+
+//access token
+export const getAccessToken = () => {
+    return sessionStorage.getItem("accessToken");
 }
