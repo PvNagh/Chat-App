@@ -12,8 +12,8 @@ const signup = (userData, socketId) => {
     !users.some(user => user.email === userData.email) && users.push({ ...userData, socketId });
 }
 
-const getUser = (userId) => {
-    return users.find(user => user.email === userId);
+const getUser = (userEmail) => {
+    return users.find(user => user.email === userEmail);
 }
 
 io.on("connection", (socket) => {
@@ -29,6 +29,23 @@ io.on("connection", (socket) => {
     socket.on("sendMessage", (data) => {
         const user = getUser(data.receiverId);
         console.log(user);
-        io.to(user.socketId).emit("getMessage", data)
-    })
-})
+        if (user) {
+            io.to(user.socketId).emit("getMessage", data)
+        } else {
+            console.log(`User not found: ${data.receiverId}`);
+        }
+    });
+
+       // Log out
+       socket.on("logout", (email) => {
+        users = users.filter(user => user.email !== email);
+        io.emit("getUsers", users);
+    });
+    
+    //disconnect
+    socket.on("disconnect", () => {
+        console.log("user disconnected");
+        users = users.filter(user => user.socketId !== socket.id);
+        io.emit("getUsers", users);
+    });
+});

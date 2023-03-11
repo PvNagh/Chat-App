@@ -6,7 +6,7 @@ import { iconPDF } from "../../../constants/data";
 import { GetApp as GetAppIcon } from "@mui/icons-material";
 
 const Own = styled(Box)`
-    background: #dcf8c6;
+    background: #F0F5F9;
     padding: 5px;
     max-width: 60%;
     width: fit-content;

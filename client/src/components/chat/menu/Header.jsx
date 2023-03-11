@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Box, styled } from '@mui/material';
 import { AccountContext } from '../../../context/AccountProvider';
 import { Chat as MessageIcon, Groups } from '@mui/icons-material';
@@ -36,7 +36,7 @@ const Image = styled('img')({
 
 const Header = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
-    const { account, setAccount, setPerson } = useContext(AccountContext);
+    const { account, setAccount, setActiveUsers, activeUsers, setPerson, socket } = useContext(AccountContext);
     const navigate = useNavigate();
 
     const toggleDrawer = () => {
@@ -48,7 +48,17 @@ const Header = () => {
         sessionStorage.clear();
         setAccount('');
         setPerson({});
+        window.location.reload(); // Reload the browser window
+        socket.current.emit("logout", account.email);
+        socket.current.disconnect();
+
     };
+
+    useEffect(() => {
+        socket.current.on("disconnect", () => {
+            setActiveUsers(activeUsers.filter(user => user.email !== account.email));
+        });
+    }, [account.email, setActiveUsers, activeUsers, socket]);
 
     return (
         <>
